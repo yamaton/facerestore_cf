@@ -161,7 +161,10 @@ class FaceRestoreCFWithModel:
                     with torch.no_grad():
                         #output = facerestore_model(cropped_face_t, w=strength, adain=True)[0]
                         # output = facerestore_model(cropped_face_t)[0]
-                        output = facerestore_model(cropped_face_t, w=codeformer_fidelity)[0]
+                        try:
+                            output = facerestore_model(cropped_face_t, w=codeformer_fidelity)[0]
+                        except TypeError:
+                            output = facerestore_model(cropped_face_t)[0]
                         restored_face = tensor2img(output, rgb2bgr=True, min_max=(-1, 1))
                     del output
                     torch.cuda.empty_cache()
